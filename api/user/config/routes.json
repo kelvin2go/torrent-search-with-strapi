@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/user/me",
+      "handler": "User.me",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

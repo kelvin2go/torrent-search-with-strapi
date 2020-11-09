@@ -1,0 +1,43 @@
+{
+  "name": "torrent-search-api-strapi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "dev": "strapi develop",
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "pm2": "pm2 start --name 'torrentApi' 'yarn start'",
+    "clean": "rm -rf ./node-modules",
+    "strapi": "strapi"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "knex": "<0.20.0",
+    "sqlite3": "latest",
+    "strapi": "3.2.5",
+    "strapi-admin": "3.2.5",
+    "strapi-connector-bookshelf": "3.2.5",
+    "strapi-connector-mongoose": "^3.2.5",
+    "strapi-plugin-content-manager": "3.2.5",
+    "strapi-plugin-content-type-builder": "3.2.5",
+    "strapi-plugin-email": "3.2.5",
+    "strapi-plugin-upload": "3.2.5",
+    "strapi-plugin-users-permissions": "3.2.5",
+    "strapi-utils": "3.2.5",
+    "torrent-search-api": "^2.1.3",
+    "webtorrent": "^0.110.1"
+  },
+  "author": {
+    "name": "kelvinho84"
+  },
+  "strapi": {
+    "uuid": "ee482ca5-eb89-4e51-bd13-8953bc801fe9"
+  },
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

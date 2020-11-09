@@ -1,0 +1,44 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/torrent",
+      "handler": "Torrent.search",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/torrent/providers",
+      "handler": "Torrent.providers",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/torrent/download",
+      "handler": "Torrent.download",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/torrent/magDownload",
+      "handler": "Torrent.magDownload",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/torrent/activeProviders",
+      "handler": "Torrent.activeProviders",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

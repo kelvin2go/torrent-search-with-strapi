@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/torrent-files",
+      "handler": "torrent-file.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/torrent-files/count",
+      "handler": "torrent-file.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/torrent-files/:id",
+      "handler": "torrent-file.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/torrent-files",
+      "handler": "torrent-file.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/torrent-files/:id",
+      "handler": "torrent-file.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/torrent-files/:id",
+      "handler": "torrent-file.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

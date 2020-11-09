@@ -1,0 +1,34 @@
+{
+  "connection": "default",
+  "collectionName": "torrent_files",
+  "info": {
+    "name": "TorrentFile"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    },
+    "magnet": {
+      "type": "text"
+    },
+    "time": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "percent": {
+      "type": "float"
+    }
+  }
+}

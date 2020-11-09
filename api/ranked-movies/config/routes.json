@@ -1,0 +1,60 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/ranked-movies",
+      "handler": "ranked-movies.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ranked-movies/pop",
+      "handler": "ranked-movies.popMovie",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ranked-movies/count",
+      "handler": "ranked-movies.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ranked-movies/:id",
+      "handler": "ranked-movies.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ranked-movies",
+      "handler": "ranked-movies.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ranked-movies/:id",
+      "handler": "ranked-movies.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ranked-movies/:id",
+      "handler": "ranked-movies.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

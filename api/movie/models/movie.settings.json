@@ -1,0 +1,22 @@
+{
+  "info": {
+    "name": "Movie"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "imdbID": {
+      "type": "string"
+    },
+    "info": {
+      "type": "json"
+    }
+  },
+  "connection": "default",
+  "collectionName": "movies"
+}

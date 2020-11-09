@@ -1,0 +1,19 @@
+{
+  "info": {
+    "name": "ranked-Movies"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "list": {
+      "type": "json"
+    }
+  },
+  "connection": "default",
+  "collectionName": "ranked_movies"
+}

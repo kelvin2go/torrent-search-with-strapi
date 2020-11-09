@@ -1,0 +1,25 @@
+{
+  "connection": "default",
+  "collectionName": "movieResult",
+  "info": {
+    "name": "movieResult",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "keyword": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date"
+    },
+    "result": {
+      "type": "json"
+    }
+  }
+}
