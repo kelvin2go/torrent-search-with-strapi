@@ -1,31 +1,12 @@
 'use strict';
 
+const { mylog } = require('../../utils/')
 /**
  * Read the documentation (https://strapi.io/documentation/3.0.0-beta.x/concepts/controllers.html#core-controllers)
  * to customize this controller
  */
 const axios = require('axios')
 const omdbAPI = `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=`
-
-
-const mylog = (function () {
-  return {
-    log: function () {
-      if (process.env !== 'production') {
-        var args = Array.prototype.slice.call(arguments);
-        console.log.apply(console, args);
-      }
-    },
-    warn: function () {
-      var args = Array.prototype.slice.call(arguments);
-      console.warn.apply(console, args);
-    },
-    error: function () {
-      var args = Array.prototype.slice.call(arguments);
-      console.error.apply(console, args);
-    }
-  }
-}())
 
 async function movieInfo(keyword) {
   if (!keyword) return
@@ -35,11 +16,11 @@ async function movieInfo(keyword) {
     imdbID: [],
     info: []
   }
-  console.log('movieInfo', keyword, dbResult)
+  mylog.log('movieInfo', keyword, dbResult)
   if (!dbResult) {
     const { data } = await axios.get(`${omdbAPI}${keyword}`)
     mylog.log('movieinfo search result', data)
-    if (!data.hasOwnProperty('Error') && data.Responses) {
+    if (data && !data.hasOwnProperty('Error')) {
       try {
         const movieData = await strapi.query('Movie').create({
           title: data.Title.toLowerCase(),
@@ -47,7 +28,6 @@ async function movieInfo(keyword) {
           info: data
         })
         content = movieData
-        console.log('movie data ', movieData)
       } catch (err) {
         mylog.log(err)
       }

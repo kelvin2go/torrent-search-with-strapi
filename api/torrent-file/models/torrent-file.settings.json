@@ -1,12 +1,15 @@
 {
+  "kind": "collectionType",
   "connection": "default",
   "collectionName": "torrent_files",
   "info": {
-    "name": "TorrentFile"
+    "name": "TorrentFile",
+    "description": ""
   },
   "options": {
     "increments": true,
-    "timestamps": true
+    "timestamps": true,
+    "draftAndPublish": false
   },
   "attributes": {
     "title": {
@@ -29,6 +32,9 @@
     },
     "percent": {
       "type": "float"
+    },
+    "createdby": {
+      "type": "string"
     }
   }
 }

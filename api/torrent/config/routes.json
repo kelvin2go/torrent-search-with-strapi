@@ -10,6 +10,14 @@
     },
     {
       "method": "GET",
+      "path": "/torrent/getInfo",
+      "handler": "Torrent.getTorrentInfo",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/torrent/providers",
       "handler": "Torrent.providers",
       "config": {
@@ -36,6 +44,14 @@
       "method": "GET",
       "path": "/torrent/activeProviders",
       "handler": "Torrent.activeProviders",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/torrent/lastest",
+      "handler": "Torrent.lastSearchedMovie",
       "config": {
         "policies": []
       }
