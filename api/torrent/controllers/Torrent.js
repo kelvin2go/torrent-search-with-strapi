@@ -12,24 +12,40 @@ const DOWNLOAD_OPT = {
   path: process.env.DOWNLOAD_PATH,
 }
 
-mylog.log(DOWNLOAD_OPT)
-mylog.log(process.env.DOWNLOAD_PATH)
+mylog.log('Download Path: ', process.env.DOWNLOAD_PATH)
+mylog.log('NasPATH Path: ', process.env.STROAGE_PATH)
 
 const SEARCH_MIN = 15
 
 function chownFile(name) {
   const { exec } = require('child_process')
-  const PATH = `chown www-data ${process.env.DOWNLOAD_PATH}/${name}`
-  mylog.log(PATH)
-  exec(PATH, (err, stdout, stderr) => {
+  const DownloadPath = `${process.env.DOWNLOAD_PATH}/${name}` || `/tmp/webtorrent/${name}`
+  const FINAL_PATH = process.env.STROAGE_PATH ? `${process.env.STROAGE_PATH}/${name}` : DownloadPath
+  if (process.env.STROAGE_PATH) {
+    exec(`mv ${DownloadPath} ${FINAL_PATH}`, (err, stdout, stderr) => {
+      if (err) {
+        // node couldn't execute the command
+        return
+      }
+
+      // the *entire* stdout and stderr (buffered)
+      console.error(`${stdout}`)
+    })
+    mylog.log('FINAL STORED', FINAL_PATH)
+  }
+
+  exec(`chown www-data ${FINAL_PATH}`, (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
       return
     }
 
     // the *entire* stdout and stderr (buffered)
-    console.err(`${stdout}`)
+    console.error(`${stdout}`)
+    mylog.log('CHOWN', `sudo chown www-data ${FINAL_PATH}`)
   })
+
+
 }
 
 
