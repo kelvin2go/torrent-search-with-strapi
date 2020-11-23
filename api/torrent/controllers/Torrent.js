@@ -12,16 +12,16 @@ const DOWNLOAD_OPT = {
   path: process.env.DOWNLOAD_PATH,
 }
 
-mylog.log('Download Path: ', process.env.DOWNLOAD_PATH)
-mylog.log('NasPATH Path: ', process.env.STROAGE_PATH)
+mylog.log('DOWNLOAD_PATH Path: ', process.env.DOWNLOAD_PATH)
+mylog.log('STORAGE_PATH Path: ', process.env.STORAGE_PATH)
 
 const SEARCH_MIN = 15
 
 function chownFile(name) {
   const { exec } = require('child_process')
   const DownloadPath = `${process.env.DOWNLOAD_PATH}/${name}` || `/tmp/webtorrent/${name}`
-  const FINAL_PATH = process.env.STROAGE_PATH ? `${process.env.STROAGE_PATH}/${name}` : DownloadPath
-  if (process.env.STROAGE_PATH) {
+  const FINAL_PATH = process.env.STORAGE_PATH ? `${process.env.STORAGE_PATH}/${name}` : DownloadPath
+  if (process.env.STORAGE_PATH) {
     exec(`mv ${DownloadPath} ${FINAL_PATH}`, (err, stdout, stderr) => {
       if (err) {
         // node couldn't execute the command
