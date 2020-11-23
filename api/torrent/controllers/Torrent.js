@@ -18,8 +18,10 @@ mylog.log(process.env.DOWNLOAD_PATH)
 const SEARCH_MIN = 15
 
 function chownFile(name) {
-  const { exec } = require('child_process');
-  exec(`chown www-data ${process.env.DOWNLOAD_PATH}/${name}`, (err, stdout, stderr) => {
+  const { exec } = require('child_process')
+  const PATH = `chown www-data ${process.env.DOWNLOAD_PATH}/${name}`
+  mylog.log(PATH)
+  exec(PATH, (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
       return
@@ -27,7 +29,6 @@ function chownFile(name) {
 
     // the *entire* stdout and stderr (buffered)
     console.err(`${stdout}`)
-    console.er(`${stderr}`)
   })
 }
 
@@ -49,7 +50,7 @@ async function movieInfo(keyword) {
 module.exports = {
   getTorrentInfo: async ctx => {
     const torrentId = ctx.request.query.hasOwnProperty('torrentId') ? ctx.request.query.torrentId : null
-    console.log('Torrrent', torrentId)
+    // console.log('Torrrent', torrentId)
     let dbTorrentFileResult = await strapi.query('torrent-file').findOne({
       magnet: torrentId,
       createdby: ctx.state.user.id
@@ -258,7 +259,7 @@ module.exports = {
     const title = dbTorrentFileResult && dbTorrentFileResult.hasOwnProperty('title') ? dbTorrentFileResult.title : 'not from db'
     mylog.log('starting', title)
     const handler = (torrent) => {
-      mylog.log(torrent)
+      // mylog.log(torrent)
 
       // Print out progress every 5 seconds
       var interval = setInterval(function () {
