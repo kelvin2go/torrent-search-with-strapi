@@ -25,25 +25,28 @@ function chownFile(name) {
     exec(`mv ${DownloadPath} ${FINAL_PATH}`, (err, stdout, stderr) => {
       if (err) {
         // node couldn't execute the command
+        console.error(err, `${stdout}`)
         return
       }
 
       // the *entire* stdout and stderr (buffered)
       console.error(`${stdout}`)
     })
-    mylog.log('FINAL STORED', FINAL_PATH)
+    mylog.log(`FINAL STORED: ${DownloadPath}`, ' to ', FINAL_PATH)
   }
 
   exec(`chown www-data ${FINAL_PATH}`, (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
+      console.error(err, `${stdout}`)
       return
     }
 
     // the *entire* stdout and stderr (buffered)
     console.error(`${stdout}`)
-    mylog.log('CHOWN', `sudo chown www-data ${FINAL_PATH}`)
+
   })
+  mylog.log('CHOWN', `sudo chown www-data ${FINAL_PATH}`)
 
 
 }
