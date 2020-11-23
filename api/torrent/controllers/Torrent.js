@@ -15,6 +15,8 @@ const DOWNLOAD_OPT = {
 mylog.log(DOWNLOAD_OPT)
 mylog.log(process.env.DOWNLOAD_PATH)
 
+const SEARCH_MIN = 15
+
 function chownFile(name) {
   const { exec } = require('child_process');
   exec(`chown www-data ${process.env.DOWNLOAD_PATH}/${name}`, (err, stdout, stderr) => {
@@ -94,7 +96,7 @@ module.exports = {
         const nowTS = new Date()
         const minDiff = (nowTS - new Date(dbMovieResult.updatedAt)) / (60 * 1000)
         mylog.log('minDiff', minDiff)
-        if (providers == null && minDiff < 15) {
+        if (providers == null && minDiff < SEARCH_MIN) {
           mylog.log('using saved search', keyword)
           torrents = dbMovieResult.result
         } else {
@@ -257,10 +259,7 @@ module.exports = {
     mylog.log('starting', title)
     const handler = (torrent) => {
       mylog.log(torrent)
-      var file = torrent && torrent.files.find(function (file) {
-        mylog.log(file)
-        return file.name.endsWith('.mp4') || file.name.endsWith('.srt') || file.name.endsWith('.jpg')
-      })
+
       // Print out progress every 5 seconds
       var interval = setInterval(function () {
         const percent = (torrent.progress * 100).toFixed(1)

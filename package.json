@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "strapi develop",
     "develop": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
+    "start": "NODE_ENV=production strapi start",
+    "build": "NODE_ENV=production strapi build",
     "pm2": "pm2 start --name 'torrentApi' 'yarn start'",
     "clean": "rm -rf ./node-modules",
     "strapi": "strapi"
