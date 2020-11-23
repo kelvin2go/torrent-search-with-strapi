@@ -20,20 +20,7 @@ const SEARCH_MIN = 15
 function chownFile(name) {
   const { exec } = require('child_process')
   const DownloadPath = `${process.env.DOWNLOAD_PATH}/${name}` || `/tmp/webtorrent/${name}`
-  const FINAL_PATH = process.env.STORAGE_PATH ? `${process.env.STORAGE_PATH}/${name}` : DownloadPath
-  if (process.env.STORAGE_PATH) {
-    exec(`mv ${DownloadPath} ${FINAL_PATH}`, (err, stdout, stderr) => {
-      if (err) {
-        // node couldn't execute the command
-        console.error(err, `${stdout}`)
-        return
-      }
-
-      // the *entire* stdout and stderr (buffered)
-      console.error(`${stdout}`)
-    })
-    mylog.log(`FINAL STORED: ${DownloadPath}`, ' to ', FINAL_PATH)
-  }
+  const FINAL_PATH = DownloadPath
 
   exec(`chown www-data ${FINAL_PATH}`, (err, stdout, stderr) => {
     if (err) {
@@ -109,7 +96,7 @@ module.exports = {
       const providers = ctx.request.query.hasOwnProperty('providers') && ctx.request.query.providers || null
 
       const dbMovieResult = await strapi.query('MovieResult').findOne({ keyword: `${keyword}_${per_page}` })
-      mylog.log('dbMovieResult', dbMovieResult)
+      // mylog.log('dbMovieResult', dbMovieResult)
       let torrents = null
 
       if (dbMovieResult) {
@@ -142,25 +129,25 @@ module.exports = {
           result: torrents,
         })
       }
-      mylog.log('tor', torrents)
+      // mylog.log('tor', torrents)
       if (torrents) {
         let list = []
         for (let torrent of torrents.slice(0, per_page)) {
-          mylog.log('torrent', torrent)
+          // mylog.log('torrent', torrent)
           const torrentResult = await strapi.query('torrent-file').findOne({ title: torrent.title })
-          mylog.log('find ? ', torrentResult)
+          // mylog.log('find ? ', torrentResult)
           if (!torrentResult) {
             const magnet = await TorrentSearchApi.getMagnet(torrent) || null
-            mylog.log('mag', magnet)
+            // mylog.log('mag', magnet)
             if (magnet) {
               const torrentFile = {
                 magnet,
                 createdby: ctx.state.user.id,
                 ...torrent
               }
-              mylog.log('torrentFile', torrentFile)
+              // mylog.log('torrentFile', torrentFile)
               const torResult = await strapi.query('torrent-file').create(torrentFile)
-              mylog.log(torResult)
+              // mylog.log(torResult)
               list.push(torResult)
             }
           } else if (torrentResult) {
@@ -169,7 +156,7 @@ module.exports = {
 
         }
 
-        mylog.log('list', list)
+        // mylog.log('list', list)
         return {
           keyword: ctx.request.query.keyword,
           torrent_count: torrents.length,
@@ -224,14 +211,8 @@ module.exports = {
     if (!dbTorrentFileResult) dbTorrentFileResult = await strapi.query('torrent-file').create(torrentFile)
 
     const handler = (torrent) => {
-      title = torrent && torrent.name
-      if (title) {
-        strapi.query('torrent-file').update(
-          { id: dbTorrentFileResult.id },
-          { title }
-        )
-      }
-
+      let torrentPath = torrent && torrent.path
+      mylog.log('torrent path', torrentPath)
       // Print out progress every 5 seconds
       var interval = setInterval(function () {
         const percent = (torrent.progress * 100).toFixed(1)
@@ -271,24 +252,45 @@ module.exports = {
   },
   download: async ctx => {
     const torrentId = ctx.request.body.hasOwnProperty('params') && ctx.request.body.params.hasOwnProperty('torrentId') ? ctx.request.body.params.torrentId : null
-    mylog.log(torrentId)
+    // mylog.log(torrentId)
     if (!torrentId) return 'missing torrentId'
 
     const dbTorrentFileResult = await strapi.query('torrent-file').findOne({ magnet: torrentId })
-    const title = dbTorrentFileResult && dbTorrentFileResult.hasOwnProperty('title') ? dbTorrentFileResult.title : 'not from db'
+    let title = dbTorrentFileResult && dbTorrentFileResult.hasOwnProperty('title') ? dbTorrentFileResult.title : 'not from db'
     mylog.log('starting', title)
-    const handler = (torrent) => {
+    const handler = async (torrent) => {
       // mylog.log(torrent)
-
+      // title = torrent && torrent.name
+      let torrentPath = torrent && torrent.path
+      let realPathTitle = title
+      if (torrent && torrent.files) {
+        if (torrent.files[0].path && torrent.files[0].path.split('/').length > 1) {
+          realPathTitle = torrent.files[0].path.split('/')[0]
+          console.log(realPathTitle)
+        }
+      }
+      mylog.log('torrent path', torrentPath)
+      if (title !== 'not from db') {
+        await strapi.query('torrent-file').update(
+          { id: dbTorrentFileResult.id },
+          { title }
+        )
+      }
       // Print out progress every 5 seconds
-      var interval = setInterval(function () {
+      var interval = setInterval(async function () {
         const percent = (torrent.progress * 100).toFixed(1)
         mylog.log(`Progress ${title}: ${percent}%`)
         if (dbTorrentFileResult) {
-          strapi.query('torrent-file').update(
+          await strapi.query('torrent-file').update(
             { id: dbTorrentFileResult.id },
             { status: 'downloading', percent }
           )
+        }
+        if (percent == 100) {
+          console.log(torrent.done)
+          chownFile(title)
+          clearInterval(interval)
+          torrent.destroy()
         }
       }, 5000)
 
@@ -300,9 +302,12 @@ module.exports = {
             { status: 'done', percent: 100 }
           )
         }
-        torrent.destroy()
-        chownFile(dbTorrentFileResult.title)
+        mylog.log('torrent path', torrentPath)
+        console.log(realPathTitle)
+        console.log(torrent.done)
+        chownFile(title)
         clearInterval(interval)
+        torrent.destroy()
       })
 
       // // Render all files into to the page
