@@ -13,16 +13,15 @@ const DOWNLOAD_OPT = {
 }
 
 mylog.log('DOWNLOAD_PATH Path: ', process.env.DOWNLOAD_PATH)
-mylog.log('STORAGE_PATH Path: ', process.env.STORAGE_PATH)
 
 const SEARCH_MIN = 15
 
-function chownFile(name) {
+function scriptAfterDownload(name) {
   const { exec } = require('child_process')
   const DownloadPath = `${process.env.DOWNLOAD_PATH}/${name}` || `/tmp/webtorrent/${name}`
   const FINAL_PATH = DownloadPath
 
-  exec(`chown www-data ${FINAL_PATH}`, (err, stdout, stderr) => {
+  exec(`chmod ugo+rwx ${FINAL_PATH}`, (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
       console.error(err, `${stdout}`)
@@ -33,7 +32,7 @@ function chownFile(name) {
     console.error(`${stdout}`)
 
   })
-  mylog.log('CHOWN', `sudo chown www-data ${FINAL_PATH}`)
+  mylog.log('CHMOD for group users', `sudo chmod ugo+rwx ${FINAL_PATH}`)
 
 
 }
@@ -239,7 +238,7 @@ module.exports = {
             percent: 100
           }
         )
-        chownFile(title)
+        scriptAfterDownload(title)
         clearInterval(interval)
         torrent.destroy()
       })
@@ -288,7 +287,7 @@ module.exports = {
         }
         if (percent == 100) {
           console.log(torrent.done)
-          chownFile(title)
+          scriptAfterDownload(title)
           clearInterval(interval)
           torrent.destroy()
         }
@@ -305,7 +304,7 @@ module.exports = {
         mylog.log('torrent path', torrentPath)
         console.log(realPathTitle)
         console.log(torrent.done)
-        chownFile(title)
+        scriptAfterDownload(title)
         clearInterval(interval)
         torrent.destroy()
       })
